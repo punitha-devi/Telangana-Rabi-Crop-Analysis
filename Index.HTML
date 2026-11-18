@@ -1,0 +1,79 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Telangana Rabi Crop Analytics | Excel · SQL · Power BI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f2e7;--sf:#fffdf6;--tx:#1d2a22;--mu:#5d6a61;--ln:#ddd6c0;--g:#2e7d5b;--o:#d99a2b;--r:#c0504d;--v:#7f6bb3;--ac:#1f4e3d;--cb:#14231b;--ct:#e6efe8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101a14;--sf:#17241c;--tx:#e8efe9;--mu:#9fb0a5;--ln:#2a3b30;--g:#4fb58a;--o:#e6b04a;--r:#e0736f;--v:#a291d4;--ac:#7fd1ab;--cb:#0b120e;--ct:#d4e6da}}
+:root[data-theme="dark"]{--bg:#101a14;--sf:#17241c;--tx:#e8efe9;--mu:#9fb0a5;--ln:#2a3b30;--g:#4fb58a;--o:#e6b04a;--r:#e0736f;--v:#a291d4;--ac:#7fd1ab;--cb:#0b120e;--ct:#d4e6da}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.6 "IBM Plex Sans",system-ui,sans-serif}
+.w{max-width:1040px;margin:0 auto;padding:28px 20px 60px}h1,h2{font-family:Fraunces,Georgia,serif;letter-spacing:-.02em;margin:0}
+h1{font-size:clamp(34px,6vw,60px);line-height:1.02;font-weight:800;color:var(--ac)}h2{font-size:26px;margin:46px 0 6px}
+.eyebrow{font:500 12px "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}.sub{color:var(--mu);max-width:680px;margin:14px 0 0;font-size:18px}
+.flow{display:flex;gap:0;margin:26px 0 8px;flex-wrap:wrap}.flow div{flex:1 1 180px;background:var(--sf);border:1px solid var(--ln);padding:12px 16px;position:relative}.flow b{display:block;font-family:Fraunces,serif;font-size:19px;color:var(--ac)}.flow span{font-size:13px;color:var(--mu)}
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:26px}.kp div{background:var(--sf);border:1px solid var(--ln);padding:16px;border-radius:4px}.kp b{font:800 30px Fraunces,serif;color:var(--ac);display:block;line-height:1.1}.kp span{font-size:13px;color:var(--mu)}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:14px;margin-top:16px}.card{background:var(--sf);border:1px solid var(--ln);border-radius:4px;padding:16px}.card h3{margin:0 0 2px;font-size:15px}.card p{margin:0 0 8px;font-size:13px;color:var(--mu)}svg{width:100%;height:auto;display:block}svg text{fill:var(--mu);font:11px "IBM Plex Sans",sans-serif}
+.ins{counter-reset:i;list-style:none;padding:0;display:grid;gap:10px;margin-top:14px}.ins li{counter-increment:i;background:var(--sf);border-left:4px solid var(--o);padding:12px 16px 12px 52px;position:relative}.ins li:before{content:counter(i);position:absolute;left:16px;top:8px;font:800 24px Fraunces,serif;color:var(--o)}
+.code{background:var(--cb);color:var(--ct);font:13px/1.55 "IBM Plex Mono",monospace;padding:16px;border-radius:4px;overflow-x:auto;white-space:pre;margin-top:12px}.code i{color:#e6b04a;font-style:normal}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:7px 10px;border-bottom:1px solid var(--ln);text-align:left}th{color:var(--mu);font-weight:500}.sc{overflow-x:auto}
+.tag{display:inline-block;border:1px solid var(--ln);background:var(--sf);padding:3px 10px;border-radius:99px;font-size:13px;margin:3px 4px 0 0}.leg span{display:inline-block;margin-right:12px;font-size:12px;color:var(--mu)}.leg i{display:inline-block;width:10px;height:10px;margin-right:5px;border-radius:2px}
+.cav{border:1px dashed var(--r);padding:12px 16px;margin-top:14px;font-size:14px;background:var(--sf)}
+</style></head><body><div class="w">
+<div class="eyebrow">Data analyst portfolio project · Excel → SQL → Power BI</div>
+<h1>What did Telangana’s Rabi farmers actually grow?</h1>
+<p class="sub">An end-to-end analysis of 12 agricultural years (2010–11 to 2021–22) across Khammam, Warangal and Bhadradri: 30 crops, 451 district-crop-year records, one messy government export turned into a decision-ready story.</p>
+<div class="flow"><div><b>1 · Excel</b><span>Cleaning, unpivot, SUMIFS analysis, KPI dashboard</span></div><div><b>2 · SQL</b><span>Star schema, window functions, CTEs, audits</span></div><div><b>3 · Power BI</b><span>Data model, DAX measures, interactive report</span></div></div>
+<div class="kp" id="kp"></div>
+
+<h2>The dashboard</h2><div class="g2">
+<div class="card"><h3>Rice and maize dominate</h3><p>Total Rabi sown area by crop, hectares (2010–2021)</p><svg id="c1" viewBox="0 0 460 260"></svg></div>
+<div class="card"><h3>Cereals crowded out pulses and oilseeds</h3><p>Share of sown area by crop group, % per year</p><svg id="c2" viewBox="0 0 460 260"></svg><div class="leg"><span><i style="background:var(--g)"></i>Cereal</span><span><i style="background:var(--o)"></i>Pulse</span><span><i style="background:var(--r)"></i>Oilseed</span><span><i style="background:var(--v)"></i>Spice</span></div></div>
+<div class="card" style="grid-column:1/-1"><h3>Yield trends (tonnes per hectare)</h3><p>Weighted yield = total production ÷ total area</p><svg id="c3" viewBox="0 0 940 260"></svg><div class="leg"><span><i style="background:var(--g)"></i>Rice</span><span><i style="background:var(--o)"></i>Maize</span><span><i style="background:var(--r)"></i>Groundnut</span></div></div></div>
+
+<h2>Key insights</h2><ol class="ins">
+<li><b>Two crops, 77% of the land.</b> Rice (49%) and maize (28%) account for most Rabi area in these districts.</li>
+<li><b>Maize is the productivity story.</b> It yields about 6.8 t/ha vs 3.4 for rice, so on just 57% of rice’s area it produces more tonnage (4.56M vs 4.01M tonnes).</li>
+<li><b>Crop diversity narrowed.</b> Cereals rose from ~71% to ~90% of area while pulses fell from 9% to 5% and oilseeds from 13% to 3%. A candidate driver is expanding irrigation, a hypothesis worth testing with water-access data.</li>
+<li><b>Groundnut is quietly improving.</b> Yield climbed from 1.8 to 3.1 t/ha (+75%) even as its area shrank, suggesting a shift to better practice rather than more land.</li></ol>
+<div class="cav"><b>Analyst’s caution:</b> Telangana re-drew its districts in 2016 (Bhadradri was carved from Khammam; Warangal was split). The sharp area drops after 2015 partly reflect new boundaries, so I compare shares and yields over time rather than raw area.</div>
+
+<h2>Data challenges I solved</h2>
+<div class="sc"><table><tr><th>Problem in the raw file</th><th>How I handled it</th></tr>
+<tr><td>“.xls” was really HTML with a 3-row merged header and 30 crops × 3 metrics laid out horizontally</td><td>Parsed with Python, unpivoted to a tidy fact table (451 rows)</td></tr>
+<tr><td>“Oilseeds total” sits beside individual crops</td><td>Flagged as aggregate and excluded to avoid double counting</td></tr>
+<tr><td>Mesta is reported in Bales, not Tonnes</td><td>Kept a unit column; excluded from tonnage maths</td></tr>
+<tr><td>Blank = crop not grown, not zero</td><td>Dropped empty rows instead of imputing zeros</td></tr>
+<tr><td>Yield column integrity</td><td>SQL audit: 0 rows deviate &gt;15% from production ÷ area</td></tr></table></div>
+
+<h2>SQL showcase</h2><p class="sub" style="font-size:16px">Year-over-year area change per district using a CTE and the <code>LAG</code> window function. The full file has 7 queries (DENSE_RANK, conditional aggregation, self-join, audit).</p>
+<div class="code"><i>WITH</i> a <i>AS</i> (<i>SELECT</i> d.district, f.year_start, <i>SUM</i>(f.area_ha) area_ha
+  <i>FROM</i> fact_crop_production f
+  <i>JOIN</i> dim_district d <i>USING</i>(district_id) <i>JOIN</i> dim_crop c <i>USING</i>(crop_id)
+  <i>WHERE</i> c.is_aggregate = 0 <i>GROUP BY</i> d.district, f.year_start)
+<i>SELECT</i> district, year_start, area_ha,
+  <i>ROUND</i>(100.0*(area_ha - <i>LAG</i>(area_ha) <i>OVER</i> w) / <i>LAG</i>(area_ha) <i>OVER</i> w, 1) <i>AS</i> yoy_pct
+<i>FROM</i> a <i>WINDOW</i> w <i>AS</i> (<i>PARTITION BY</i> district <i>ORDER BY</i> year_start);</div>
+
+<h2>Power BI model</h2><p class="sub" style="font-size:16px">A star schema with one fact table and three dimensions, plus reusable DAX measures.</p>
+<div class="code">dim_district ─┐
+dim_crop     ─┼─▶ fact_crop_production (area_ha, production, yield_per_ha)
+dim_year     ─┘
+
+Yield (t/ha)  = DIVIDE ( [Total Production (t)], [Total Area (ha)] )
+Area YoY %    = DIVIDE ( [Total Area (ha)] - [Area PY], [Area PY] )
+Cereal Share % = DIVIDE ( CALCULATE ( [Total Area (ha)], dim_crop[crop_group] = "Cereal" ), [Total Area (ha)] )</div>
+<h2>Skills demonstrated</h2><div><span class="tag">Data cleaning</span><span class="tag">Unpivoting</span><span class="tag">Excel: SUMIFS, charts</span><span class="tag">SQL: CTE, window functions</span><span class="tag">Star-schema modelling</span><span class="tag">DAX</span><span class="tag">Power BI</span><span class="tag">Data-quality auditing</span><span class="tag">Insight storytelling</span></div>
+<p class="eyebrow" style="margin-top:40px">Source: Telangana agriculture statistics portal (area, production, yield report), Rabi season.</p>
+</div>
+<script>
+const D={"y":[2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021],"top":[["Rice",1178414,4005049],["Maize",671423,4562508],["Groundnut",197277,379930],["Dry chillies",133505,528421],["Moong(Green Gram)",66643,52565],["Urad",44565,38271],["Jowar",27143,24864],["Cowpea(Lobia)",22869,29185]],"g":[[71.4,65.2,66.4,74.1,69.6,67.4,81.1,89.1,86.5,95.6,93.3,89.7],[9.3,12.3,9.1,4.7,9.1,7.5,4.7,3.1,3.9,1.3,3.5,5.3],[12.6,13.1,15.1,12.5,12.3,14.1,7.8,4.9,5.5,1.4,2.1,2.8],[6.5,9.3,9.5,7.9,7.6,9.3,5.3,2.2,3.1,1.5,1.1,1.9]],"yl":{"Rice":[3.48,2.73,3.4,3.17,3.46,3.07,4.03,3.65,3.34,3.76,3.39,3.13],"Maize":[6.54,5.14,5.57,5.49,6.44,6.46,8.88,7.43,7.39,7.04,7.82,7.71],"Groundnut":[1.77,1.87,1.85,1.71,1.78,1.91,2.36,2.58,2.62,2.63,2.54,3.1]},"kpi":[2390146,9743860,4.08,29,451]};const $=s=>document.getElementById(s);const f=n=>n.toLocaleString("en-IN");
+const k=D.kpi;$("kp").innerHTML=[[(k[0]/1e6).toFixed(2)+"M","hectares sown"],[(k[1]/1e6).toFixed(2)+"M","tonnes produced"],[k[2],"avg yield, t/ha"],[k[3],"crops analysed"],[k[4],"records modelled"]].map(x=>"<div><b>"+x[0]+"</b><span>"+x[1]+"</span></div>").join("");
+const C=["var(--g)","var(--o)","var(--r)","var(--v)"];
+// c1 horizontal bars
+(function(){let m=D.top[0][1],h="";D.top.forEach((r,i)=>{const w=r[1]/m*250,y=8+i*30;h+=`<text x="0" y="${y+15}">${r[0].replace("Moong(Green Gram)","Moong")}</text><rect x="100" y="${y}" width="${w}" height="20" rx="2" fill="${i<2?"var(--g)":"var(--o)"}"/><text x="${106+w}" y="${y+15}">${f(r[1])}</text>`});$("c1").innerHTML=h})();
+// c2 stacked 100%
+(function(){let h="",n=D.y.length,bw=26,gap=(430-n*bw)/n;D.y.forEach((y,i)=>{let t=0,x=28+i*(bw+gap);D.g.forEach((s,j)=>{const hh=s[i]*2;h+=`<rect x="${x}" y="${230-t-hh}" width="${bw}" height="${hh}" fill="${C[j]}"/>`;t+=hh});h+=`<text x="${x+2}" y="248">${String(y).slice(2)}</text>`});[0,50,100].forEach(v=>h+=`<text x="0" y="${234-v*2}">${v}%</text>`);$("c2").innerHTML=h})();
+// c3 lines
+(function(){const names=Object.keys(D.yl),n=D.y.length,x=i=>50+i*(860/(n-1)),y=v=>230-v*24;let h="";[0,2,4,6,8].forEach(v=>h+=`<line x1="40" x2="920" y1="${y(v)}" y2="${y(v)}" stroke="var(--ln)"/><text x="10" y="${y(v)+4}">${v}</text>`);
+names.forEach((nm,j)=>{const c=["var(--g)","var(--o)","var(--r)"][j],p=D.yl[nm].map((v,i)=>x(i)+","+y(v)).join(" ");h+=`<polyline points="${p}" fill="none" stroke="${c}" stroke-width="3"/>`;const l=D.yl[nm][n-1];h+=`<text x="${x(n-1)-8}" y="${y(l)-8}" style="fill:${c};font-weight:600">${l}</text>`});
+D.y.forEach((v,i)=>h+=`<text x="${x(i)-14}" y="252">${v}-${String(v+1).slice(2)}</text>`);$("c3").innerHTML=h})();
+</script></body></html>
